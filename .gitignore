@@ -1,0 +1,11 @@
+# Python Virtual Environment
+.venv/
+
+# Environment Variables
+config/*.env
+!config/*.template.env
+
+# Django 
+**/__pycache__/
+**/migrations/
+**/*.sqlite3

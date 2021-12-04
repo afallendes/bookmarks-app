@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+
+  web:
+    container_name: bookmarks-app_web
+    build: .
+    command: /bin/sh entrypoint.sh
+    volumes:
+      - ./project:/project
+    ports:
+      - '8891:8000'
+    env_file:
+      - ./config/django.env
+    depends_on:
+      - db
+    restart: on-failure
+  
+  db:
+    container_name: bookmarks-app_db
+    image: postgres:14
+    env_file:
+      - ./config/postgres.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  pgdata:
