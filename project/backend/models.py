@@ -41,7 +41,7 @@ class Bookmark(models.Model):
 
 class Tag(models.Model):
     slug = models.SlugField(unique=True)
-    bookmarks = models.ManyToManyField(Bookmark)
+    bookmarks = models.ManyToManyField(Bookmark, related_name='tags', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
