@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from rest_framework.routers import DefaultRouter, SimpleRouter
+from rest_framework.routers import SimpleRouter
 
 from .views import BookmarkViewSet, TagViewSet, ListBookmarksByTagView
 

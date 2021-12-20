@@ -1,6 +1,4 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import generics, request, serializers, status, viewsets, views
-from rest_framework.decorators import action
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 
 from .models import CustomUser, Bookmark, Tag
