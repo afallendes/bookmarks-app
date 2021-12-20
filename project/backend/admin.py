@@ -1,8 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 
 from .models import CustomUser, Bookmark, Tag
 from .forms import CustomUserCreationForm, CustomUserChangeForm
+
+
+admin.site.unregister(Group)
 
 
 @admin.register(Bookmark)
@@ -10,10 +14,10 @@ class BookmarkAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'created_at', 'modified_at',)
     
 
-
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('slug', 'created_at', 'modified_at',)
+    list_display = ('text', 'created_at', 'modified_at',)
+    prepopulated_fields = {'slug': ('text',)}
 
 
 # Ref: https://testdriven.io/blog/django-custom-user-model/ 
