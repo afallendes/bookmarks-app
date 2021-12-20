@@ -27,9 +27,6 @@ class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
 
-    def get_queryset(self):
-        return Tag.objects.filter(bookmarks__user=self.request.user).distinct()
-
 
 class ListBookmarksByTagView(generics.RetrieveAPIView):
     """
