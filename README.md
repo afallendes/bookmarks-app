@@ -8,11 +8,11 @@ Method | Endpoint                   | Description
 ---    | ---                        | ---
 GET    | /api/bookmarks/            | Retrieve all bookmarks
 POST   | /api/bookmarks/            | Create bookmark
-GET    | /api/bookmarks/\<pk>       | Retrieve specified _pk_ bookmark
-PUT    | /api/bookmarks/\<pk>       | Update specified _pk_ bookmark
-DEL    | /api/bookmarks/\<pk>       | Delete specified _pk_ bookmark
-GET    | /api/bookmarks/tag/\<slug> | Retrieve all bookmarks with _slug_ tag
+GET    | /api/bookmarks/\<int:pk>       | Retrieve specified _pk_ bookmark
+PUT    | /api/bookmarks/\<int:pk>       | Update specified _pk_ bookmark
+DEL    | /api/bookmarks/\<int:pk>       | Delete specified _pk_ bookmark
+GET    | /api/bookmarks/tag/\<int:pk> | Retrieve all bookmarks with _pk_ tag
 GET    | /api/tags/                 | Retrieve all tags
-GET    | /api/tags/\<slug>          | Retrieve specified _slug_ tag
-PUT    | /api/tags/\<slug>          | Update specified _slug_ tag
-DEL    | /api/tags/\<slug>          | Delete specified _slug_ tag
+GET    | /api/tags/\<int:pk>          | Retrieve specified _pk_ tag
+PUT    | /api/tags/\<int:pk>          | Update specified _pk_ tag
+DEL    | /api/tags/\<int:pk>          | Delete specified _pk_ tag
