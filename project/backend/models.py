@@ -22,26 +22,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-class Bookmark(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    title = models.CharField(max_length=200)
-    url = models.URLField(verbose_name='URL', max_length=200, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        verbose_name = 'Bookmark'
-        verbose_name_plural = 'Bookmarks'
-
-    def __str__(self):
-        return self.title[:80]
     
 
 class Tag(models.Model):
-    slug = models.SlugField(unique=True)
-    bookmarks = models.ManyToManyField(Bookmark, related_name='tags', blank=True)
+    slug = models.SlugField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -51,3 +35,20 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.slug
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    url = models.URLField(verbose_name='URL', max_length=200, unique=True)
+    comments = models.TextField(max_length=500, blank=True)
+    tags = models.ManyToManyField(Tag, related_name='bookmarks')
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = 'Bookmark'
+        verbose_name_plural = 'Bookmarks'
+
+    def __str__(self):
+        return self.url

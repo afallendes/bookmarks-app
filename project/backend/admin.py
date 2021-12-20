@@ -7,12 +7,13 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 @admin.register(Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('title', 'user', 'created_at', 'modified_at',)
+    
 
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('slug', 'created_at', 'modified_at',)
 
 
 # Ref: https://testdriven.io/blog/django-custom-user-model/ 
