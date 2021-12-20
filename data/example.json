@@ -1,0 +1,19 @@
+[
+    {
+        "title": "Using PostgreSQL with Django",
+        "url": "https://djangocentral.com/using-postgresql-with-django/",
+        "comments": "",
+        "tags": [
+            {"slug": "python"}
+        ]
+    },
+    {
+        "title": "Creating a Custom User Model in Django",
+        "url": "https://testdriven.io/blog/django-custom-user-model/",
+        "comments": "",
+        "tags": [
+            {"slug": "python"},
+            {"slug": "programming"}
+        ]
+    }
+]
