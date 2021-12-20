@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
+from django.utils.text import slugify
 
 from backend.managers import CustomUserManager
 
@@ -29,6 +30,12 @@ class Tag(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+    def save(self):
+        # Ensure that first created instance slug field is indeed an slug
+        if not self.pk:
+            self.slug = slugify(self.slug)
+        return super().save()
+    
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
