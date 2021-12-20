@@ -9,6 +9,7 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = (
             'pk',
+            'text',
             'slug',
         )
 

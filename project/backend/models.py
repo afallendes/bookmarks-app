@@ -26,15 +26,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
 
 class Tag(models.Model):
-    slug = models.SlugField()
+    text = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
-    def save(self):
-        # Ensure that first created instance slug field is indeed an slug
-        if not self.pk:
-            self.slug = slugify(self.slug)
-        return super().save()
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.text).lower()
+        return super().save(*args, **kwargs)
     
     class Meta:
         verbose_name = 'Tag'
