@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Remove previous migration files if any
+rm */migrations/*.py
+
 # Make migrations for admin, auth, contenttypes, sessions apps
 python manage.py makemigrations
 
