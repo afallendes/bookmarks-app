@@ -24,8 +24,13 @@ class TagViewSet(viewsets.ModelViewSet):
     List all tags and perform CRUD operations.
     """
 
-    queryset = Tag.objects.all()
     serializer_class = TagSerializer
+
+    def get_queryset(self):
+        return Tag.objects.all().filter(user=self.request.user)
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 
 class ListBookmarksByTagView(generics.RetrieveAPIView):

@@ -26,8 +26,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
 
 class Tag(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     text = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True,)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
