@@ -12,9 +12,9 @@ class BaseListView(ListView):
     Base class for the following custom list views.
     """
     
-    # def get_queryset(self):
-    #     user = self.request.user
-    #     return super().get_queryset().filter(user=user)
+    def get_queryset(self):
+        user = self.request.user
+        return super().get_queryset().order_by('-created_at')#.filter(user=user)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
