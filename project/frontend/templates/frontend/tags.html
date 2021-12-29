@@ -1,0 +1,27 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}Tags{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="d-flex justify-content-between mb-3">
+        <h3>Tags</h3>
+        {% comment %} <h3>Search: {{ by_search }}</h3> {% endcomment %}
+        {% comment %} <button type="button" class="btn btn-primary"><i class="bi bi-bookmark-plus"></i> Bookmark</button> {% endcomment %}
+    </div>
+    
+    <ul class="list-group">
+        {{ letters.A.slug }}
+        {% for letter in letters %}
+        {% for tag in letter.tags %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ tag.slug }}
+            <span class="badge bg-primary rounded-pill">{{ tag.bookmarks__count }}</span>
+        </li>
+        {% endfor %}
+        {% endfor %}
+    </ul>
+
+    {% include 'frontend/modules/pagination.html' %}
+</div>
+{% endblock %}
