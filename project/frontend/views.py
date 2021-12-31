@@ -55,13 +55,13 @@ class BookmarkListView(BaseListView):
 class BookmarkRecentListView(BaseListView):
     """
     List the most recent bookmarks sorted by created_at.
-    By default it lists 10.
+    By default it lists last 5.
     """
 
     model = Bookmark
     template_name = "frontend/bookmarks_recent.html"
     context_object_name = 'bookmarks'
-    recent_items_num = 10
+    recent_items_num = 5
 
     def get_recent_items_num(self):
         return self.recent_items_num
