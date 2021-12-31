@@ -2,19 +2,21 @@ from string import ascii_uppercase
 
 from django.db.models import Count, F
 from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse
 
 from backend.models import CustomUser, Bookmark, Tag
 from frontend.forms import SearchForm
 
 
-class BaseListView(ListView):
+class BaseListView(LoginRequiredMixin, ListView):
     """
     Base class for the following custom list views.
     """
     
     def get_queryset(self):
         user = self.request.user
-        return super().get_queryset().order_by('-created_at')#.filter(user=user)
+        return super().get_queryset().order_by('-created_at').filter(user=user)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
