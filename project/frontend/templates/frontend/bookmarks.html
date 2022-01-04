@@ -16,7 +16,7 @@
         {% endif %}
         </h3>
         {% comment %} <h3>Search: {{ by_search }}</h3> {% endcomment %}
-        <button type="button" class="btn btn-primary"><i class="bi bi-bookmark-plus"></i> Bookmark</button>
+        <a class="btn btn-primary" href="{% url 'frontend:bookmark-create' %}" role="button"><i class="bi bi-bookmark-plus"></i> Bookmark</a>
     </div>
     
     <ul class="list-group">

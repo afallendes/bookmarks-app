@@ -1,9 +1,10 @@
 from string import ascii_uppercase
+from django.db import models
 
-from django.db.models import Count, F
+from django.db.models import Count, F, fields
 from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.urls import reverse_lazy
 
 from backend.models import CustomUser, Bookmark, Tag
 from frontend.forms import SearchForm
@@ -98,3 +99,14 @@ class BookmarkDeleteView(DeleteView):
 
     def get_success_url(self):
         return self.request.GET.get('next')
+
+
+class BookmarkCreateView(CreateView):
+    model = Bookmark
+    template_name = "frontend/bookmark_create_form.html"
+    fields = ('title', 'url', 'tags',)
+    success_url = reverse_lazy('frontend:bookmarks-list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
