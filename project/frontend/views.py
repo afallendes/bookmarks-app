@@ -7,7 +7,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from backend.models import CustomUser, Bookmark, Tag
-from frontend.forms import SearchForm
 
 
 class BaseListView(LoginRequiredMixin, ListView):
@@ -18,11 +17,6 @@ class BaseListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         return super().get_queryset().order_by('-created_at').filter(user=user)
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["search_form"] = SearchForm(label_suffix='')
-        return context
 
 
 class BookmarkListView(BaseListView):

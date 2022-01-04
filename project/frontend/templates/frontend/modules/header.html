@@ -5,9 +5,8 @@
       <span class="fs-4"><i class="bi bi-bookmark-star"></i> Bookmarks App</span>
     </a>
     <form class="form-floating col-12 col-lg-auto mb-3 mb-lg-0" action="{% url 'frontend:bookmarks-list' %}" method="GET">
-      {{ search_form.search.errors }}
-      {{ search_form.search }}
-      {{ search_form.search.label_tag }}
+      <input class="form-control" type="text" name="search" placeholder="Search..." maxlength="50" minlength="1" required id="search-input">
+      <label for="search-input">Search</label>
     </form>
   </div>
 </header>
