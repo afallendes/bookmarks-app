@@ -1,7 +1,7 @@
 from string import ascii_uppercase
 
 from django.db.models import Count, F
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
@@ -81,3 +81,20 @@ class BookmarkRecentListView(BaseListView):
 #             count=Count('bookmarks'),
 #         )
 #         return { _:queryset.filter(slug__istartswith=_) for _ in ascii_uppercase }
+
+
+class BookmarkUpdateView(UpdateView):
+    model = Bookmark
+    template_name = "frontend/bookmark_update_form.html"
+    fields = ['title', 'url', 'tags']
+
+    def get_success_url(self):
+        return self.request.get_full_path()
+
+
+class BookmarkDeleteView(DeleteView):
+    model = Bookmark
+    template_name = "frontend/bookmark_confirm_delete.html"
+
+    def get_success_url(self):
+        return self.request.GET.get('next')
