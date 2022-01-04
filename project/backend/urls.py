@@ -4,6 +4,8 @@ from rest_framework.routers import SimpleRouter
 
 from .views import BookmarkViewSet, TagViewSet, ListBookmarksByTagView
 
+app_name = 'backend'
+
 router = SimpleRouter()
 router.register('bookmarks', BookmarkViewSet, basename='bookmarks')
 router.register('tags', TagViewSet, basename='tags')

@@ -16,7 +16,7 @@
         {% endif %}
         </h3>
         {% comment %} <h3>Search: {{ by_search }}</h3> {% endcomment %}
-        <button type="button" class="btn btn-primary"><i class="bi bi-bookmark-plus"></i> Bookmark</button>
+        <a class="btn btn-primary" href="{% url 'frontend:bookmark-create' %}" role="button"><i class="bi bi-bookmark-plus"></i> Bookmark</a>
     </div>
     
     <ul class="list-group">
@@ -27,8 +27,8 @@
                     <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a>
                 </h6>
                 <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                    <button type="button" class="btn btn-outline-secondary"><i class="bi bi-pencil-square"></i></button>
-                    <button type="button" class="btn btn-outline-secondary"><i class="bi bi-trash"></i></button>
+                    <a class="btn btn-outline-secondary" href="{{ bookmark.pk }}/update/" role="button"><i class="bi bi-pencil-square"></i></a>
+                    <a class="btn btn-outline-secondary" href="{{ bookmark.pk }}/delete/?next={{ request.get_full_path|urlencode }}" role="button"><i class="bi bi-trash"></i></a>
                 </div>
             </div>
             {% if bookmark.comments %}
