@@ -1,12 +1,14 @@
 {% extends 'frontend/base.html' %}
 
-{% block title %}Bookmarks{% endblock %}
+{% block title %}Delete{% endblock %}
 
-{% block body %}
+{% block section_title %}Delete Bookmark{% endblock %}
+
+{% block section_content %}
 <form method="post">
     {% csrf_token %}
     <p>Are you sure you want to delete the following bookmark?</p>
-    <p>{{ object }}</p>
+    <p><a href="{{ object.url }}">{{ object.title }}</a></p>
     <input type="submit" value="Confirm">
 </form>
 {% endblock %}

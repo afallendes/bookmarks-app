@@ -1,9 +1,11 @@
 {% extends 'frontend/base.html' %}
 
-{% block title %}Bookmarks{% endblock %}
+{% block title %}Update{% endblock %}
 
-{% block body %}
-<form method="post">
+{% block section_title %}Update Bookmark{% endblock %}
+
+{% block section_content %}
+<form class="form" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Update">

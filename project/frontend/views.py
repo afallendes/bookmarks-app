@@ -18,6 +18,12 @@ class BaseListView(LoginRequiredMixin, ListView):
         user = self.request.user
         return super().get_queryset().order_by('-created_at').filter(user=user)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["enable_new_bookmark_button"] = True
+        return context
+    
+
 
 class BookmarkListView(BaseListView):
     """

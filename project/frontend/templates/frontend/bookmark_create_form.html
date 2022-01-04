@@ -1,9 +1,10 @@
 {% extends 'frontend/base.html' %}
 
-{% block title %}Bookmarks - New Bookmark{% endblock %}
+{% block title %}New{% endblock %}
 
-{% block body %}
-<form method="POST">
+{% block section_title %}New Bookmark{% endblock %}
+
+{% block section_content %}
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Save">

@@ -1,37 +1,31 @@
 {% extends 'frontend/base.html' %}
 
-{% block title %}Bookmarks{% endblock %}
+{% block title %}Most Recent{% endblock %}
 
-{% block body %}
-<div class="container">
-    <div class="d-flex justify-content-between mb-3">
-        <h3>Most Recent</h3>
-        <button type="button" class="btn btn-primary">
-            <i class="bi bi-bookmark-plus"></i> Bookmark
-        </button>
-    </div>
-    <ul class="list-group">
-        {% for bookmark in bookmarks %}
-        <li class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
-                <h6 class="mb-1 text-truncate">
-                    <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a>
-                </h6>
-                <small>{{ bookmark.created_at}}</small>
-            </div>
-            {% if bookmark.comments %}
-            <p class="mb-1">{{ bookmark.comments }}</p>
-            {% endif %}
-            
-            {% if bookmark.tags.all %}
-            <small>
-                {% for tag in bookmark.tags.all %}
-                <a href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}" class="link-primary">{{ tag.text }}</a>
-                {% endfor %}
-            </small>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-</div>
+{% block section_title %}Most Recent{% endblock %}
+
+{% block section_content %}
+<ul class="list-group">
+    {% for bookmark in bookmarks %}
+    <li class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+            <h6 class="mb-1 text-truncate">
+                <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a>
+            </h6>
+            <small>{{ bookmark.created_at}}</small>
+        </div>
+        {% if bookmark.comments %}
+        <p class="mb-1">{{ bookmark.comments }}</p>
+        {% endif %}
+        
+        {% if bookmark.tags.all %}
+        <small>
+            {% for tag in bookmark.tags.all %}
+            <a href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}" class="link-primary">{{ tag.text }}</a>
+            {% endfor %}
+        </small>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
