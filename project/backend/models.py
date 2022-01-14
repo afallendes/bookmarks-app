@@ -41,7 +41,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Tags'
 
     def __str__(self):
-        return self.slug
+        return self.text
 
 
 class Bookmark(models.Model):
