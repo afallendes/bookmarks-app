@@ -49,7 +49,7 @@ class Bookmark(models.Model):
     title = models.CharField(max_length=200)
     url = models.URLField(verbose_name='URL', max_length=200, unique=True)
     comments = models.TextField(max_length=500, blank=True)
-    tags = models.ManyToManyField(Tag, related_name='bookmarks')
+    tags = models.ManyToManyField(Tag, related_name='bookmarks', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
