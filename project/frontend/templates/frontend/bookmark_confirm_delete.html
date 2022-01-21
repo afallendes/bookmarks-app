@@ -9,6 +9,6 @@
     {% csrf_token %}
     <p>Are you sure you want to delete the following bookmark?</p>
     <p><a href="{{ object.url }}">{{ object.title }}</a></p>
-    <input type="submit" value="Confirm">
+    <input type="submit" class="btn btn-outline-danger" value="Confirm">
 </form>
 {% endblock %}
