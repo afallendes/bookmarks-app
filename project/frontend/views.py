@@ -85,7 +85,7 @@ class BookmarkRecentListView(BaseListView):
 #         return { _:queryset.filter(slug__istartswith=_) for _ in ascii_uppercase }
 
 
-class BookmarkUpdateView(UpdateView):
+class BookmarkUpdateView(LoginRequiredMixin, UpdateView):
     model = Bookmark
     template_name = "frontend/bookmark_update_form.html"
     fields = ['title', 'url', 'tags']
@@ -94,7 +94,7 @@ class BookmarkUpdateView(UpdateView):
         return self.request.get_full_path()
 
 
-class BookmarkDeleteView(DeleteView):
+class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
     model = Bookmark
     template_name = "frontend/bookmark_confirm_delete.html"
 
@@ -102,7 +102,7 @@ class BookmarkDeleteView(DeleteView):
         return self.request.GET.get('next')
 
 
-class BookmarkCreateView(CreateView):
+class BookmarkCreateView(LoginRequiredMixin, CreateView):
     model = Bookmark
     template_name = "frontend/bookmark_create_form.html"
     fields = ('title', 'url', 'tags',)
