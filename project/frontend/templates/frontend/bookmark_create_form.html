@@ -11,6 +11,15 @@
     <select name="extra-tags" id="extra-tags" multiple hidden></select>
 
     <div class="row mb-3">
+        {{ form.url.errors }}
+        <label for="{{ form.url.id_for_label }}" class="col-sm-2 col-form-label">
+            {{ form.url.label }}
+        </label>
+        <div class="col-sm-10">
+            {{ form.url }}
+        </div>
+    </div>
+    <div class="row mb-3">
         {{ form.title.errors }}
         <label for="{{ form.title.id_for_label }}" class="col-sm-2 col-form-label">
             {{ form.title.label }}
@@ -20,12 +29,12 @@
         </div>
     </div>
     <div class="row mb-3">
-        {{ form.url.errors }}
-        <label for="{{ form.url.id_for_label }}" class="col-sm-2 col-form-label">
-            {{ form.url.label }}
+        {{ form.comments.errors }}
+        <label for="{{ form.comments.id_for_label }}" class="col-sm-2 col-form-label">
+            {{ form.comments.label }}
         </label>
         <div class="col-sm-10">
-            {{ form.url }}
+            {{ form.comments }}
         </div>
     </div>
     <div class="row mb-3">

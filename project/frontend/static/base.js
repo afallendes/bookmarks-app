@@ -1,7 +1,8 @@
 $(function () {
 
     // Add Bootstrap's form-control class to all visible 'input' elements.
-    $('input:not([type=hidden]):not([type=test])').addClass('form-control');
+    $('input:not([type=hidden])').addClass('form-control');
+    $('textarea:not([type=hidden])').addClass('form-control').attr('rows', '2');
 
 
     // Add SelectizeJS to main select element for tags.

@@ -88,7 +88,7 @@ class BookmarkRecentListView(BaseListView):
 class BookmarkUpdateView(LoginRequiredMixin, UpdateView):
     model = Bookmark
     template_name = "frontend/bookmark_update_form.html"
-    fields = ['title', 'url', 'tags']
+    fields = ['url', 'title', 'comments',  'tags']
 
     def get_success_url(self):
         return self.request.get_full_path()
@@ -105,7 +105,7 @@ class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
 class BookmarkCreateView(LoginRequiredMixin, CreateView):
     model = Bookmark
     template_name = "frontend/bookmark_create_form.html"
-    fields = ('title', 'url', 'tags',)
+    fields = ('url', 'title', 'comments', 'tags',)
     success_url = reverse_lazy('frontend:bookmarks-list')
 
     extra_tags = None
