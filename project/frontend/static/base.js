@@ -19,7 +19,11 @@ $(function () {
                 // or already exists.
                 value: '**' + text.slugify(),
                 text: text
-        }
+            }
+        },
+        sortField: {
+            field: 'text',
+            direction: 'asc'
         },
         onItemAdd(value, $item) {
             if (value.startsWith('**')) {
