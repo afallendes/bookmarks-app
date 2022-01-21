@@ -91,7 +91,7 @@ class BookmarkUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['url', 'title', 'comments',  'tags']
 
     def get_success_url(self):
-        return self.request.get_full_path()
+        return self.request.GET.get('next')
 
 
 class BookmarkDeleteView(LoginRequiredMixin, DeleteView):

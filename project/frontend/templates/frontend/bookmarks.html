@@ -21,7 +21,7 @@
                     <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a>
                 </h6>
                 <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                    <a class="btn btn-outline-secondary border-end-0" href="{{ bookmark.pk }}/update/" role="button"><i class="bi bi-pencil-square"></i></a>
+                    <a class="btn btn-outline-secondary border-end-0" href="{{ bookmark.pk }}/update/?next={{ request.get_full_path|urlencode }}" role="button"><i class="bi bi-pencil-square"></i></a>
                     <a class="btn btn-outline-danger" href="{{ bookmark.pk }}/delete/?next={{ request.get_full_path|urlencode }}" role="button"><i class="bi bi-trash"></i></a>
                 </div>
             </div>
