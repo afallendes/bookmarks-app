@@ -85,30 +85,15 @@ class BookmarkRecentListView(BaseListView):
 #         return { _:queryset.filter(slug__istartswith=_) for _ in ascii_uppercase }
 
 
-class BookmarkUpdateView(LoginRequiredMixin, UpdateView):
+class BaseCreateUpdateView(LoginRequiredMixin):
     model = Bookmark
-    template_name = "frontend/bookmark_update_form.html"
     fields = ['url', 'title', 'comments',  'tags']
-
-    def get_success_url(self):
-        return self.request.GET.get('next')
-
-
-class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
-    model = Bookmark
-    template_name = "frontend/bookmark_confirm_delete.html"
-
-    def get_success_url(self):
-        return self.request.GET.get('next')
-
-
-class BookmarkCreateView(LoginRequiredMixin, CreateView):
-    model = Bookmark
-    template_name = "frontend/bookmark_create_form.html"
-    fields = ('url', 'title', 'comments', 'tags',)
-    success_url = reverse_lazy('frontend:bookmarks-list')
-
     extra_tags = None
+
+
+    def get_success_url(self):
+        return self.request.GET.get('next')
+
 
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -158,4 +143,18 @@ class BookmarkCreateView(LoginRequiredMixin, CreateView):
         
         return form_valid_return
     
+
+class BookmarkCreateView(BaseCreateUpdateView, CreateView):
+    template_name = "frontend/bookmark_create_form.html"
+
+
+class BookmarkUpdateView(BaseCreateUpdateView, UpdateView):
+    template_name = "frontend/bookmark_update_form.html"
     
+
+class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
+    model = Bookmark
+    template_name = "frontend/bookmark_confirm_delete.html"
+
+    def get_success_url(self):
+        return self.request.GET.get('next')

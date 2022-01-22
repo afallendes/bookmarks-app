@@ -1,13 +1,13 @@
-{% extends 'frontend/base.html' %}
+{% extends 'frontend/bookmark_form.html' %}
 
-{% block title %}Update{% endblock %}
+{% block title %}
+Update Bookmark
+{% endblock %}
 
-{% block section_title %}Update Bookmark{% endblock %}
+{% block section_title %}
+Update Bookmark
+{% endblock %}
 
-{% block section_content %}
-<form class="form" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+{% block action_url %}
+{% url 'frontend:bookmark-update' %}
 {% endblock %}
