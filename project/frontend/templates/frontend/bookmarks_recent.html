@@ -21,7 +21,7 @@
         {% if bookmark.tags.all %}
         <small>
             {% for tag in bookmark.tags.all %}
-            <a href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}" class="link-primary">{{ tag.text }}</a>
+            <a href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}" class="link-primary"><span class="badge bg-secondary">{{ tag.text }}</span></a>
             {% endfor %}
         </small>
         {% endif %}
