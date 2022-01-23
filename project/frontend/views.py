@@ -1,3 +1,4 @@
+from ast import Try
 import re
 from urllib.request import Request, urlopen
 from string import ascii_uppercase
@@ -20,6 +21,17 @@ class BaseListView(LoginRequiredMixin, ListView):
     """
     Base class for the following custom list views.
     """
+
+    enable_new_bookmark_button = True
+    
+    def get_enable_new_bookmark_button(self):
+        # Helper for templates to indicate if the New Bookmark button should be rendered.
+        try:
+            enabled = self.enable_new_bookmark_button
+        except:
+            return False
+        else:
+            return enabled
     
     def get_queryset(self):
         user = self.request.user
@@ -27,7 +39,7 @@ class BaseListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["enable_new_bookmark_button"] = True
+        context["enable_new_bookmark_button"] = self.get_enable_new_bookmark_button()
         return context
     
 
