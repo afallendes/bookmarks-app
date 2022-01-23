@@ -3,11 +3,14 @@ from string import ascii_uppercase
 from django.db import models
 
 from django.db.models import Count, F, fields
+from django.forms import BooleanField, BoundField
 from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from backend.models import CustomUser, Bookmark, Tag
+
+from .forms import BookmarkForm
 
 
 class BaseListView(LoginRequiredMixin, ListView):
@@ -86,17 +89,19 @@ class BookmarkRecentListView(BaseListView):
 
 
 class BaseCreateUpdateView(LoginRequiredMixin):
-    model = Bookmark
-    fields = ['url', 'title', 'comments',  'tags']
+    form_class = BookmarkForm
     extra_tags = None
 
 
     def get_success_url(self):
         return self.request.GET.get('next')
-
-
+    
+    
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
+
+        form_kwargs['user'] = self.request.user # To help the bookmark form filter tags by user
+
         if 'data' in form_kwargs:
             data = form_kwargs['data'].copy()
             
@@ -124,9 +129,7 @@ class BaseCreateUpdateView(LoginRequiredMixin):
 
 
     def form_valid(self, form):
-        user = self.request.user
-        
-        form.instance.user = user
+        form.instance.user = self.request.user
 
         # need to run form_valid() first to create/save form instance, and then
         # attach the extra tags. This is required due to m-2-m implementation.
