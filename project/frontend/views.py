@@ -1,11 +1,14 @@
-from email.mime import text
+import re
+from urllib.request import Request, urlopen
 from string import ascii_uppercase
-from django.db import models
 
+from django.http import HttpResponse
 from django.db.models import Count, F, fields
 from django.forms import BooleanField, BoundField
 from django.views.generic import ListView, CreateView,UpdateView, DeleteView
+from django.views.decorators.http import require_GET
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 
 from backend.models import CustomUser, Bookmark, Tag
@@ -161,3 +164,18 @@ class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return self.request.GET.get('next')
+
+@login_required
+@require_GET
+def get_url_metadata(request):
+    r = Request(
+        request.GET.get('url'),
+        headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+        }
+    )
+    html = urlopen(r).read().decode('utf-8')
+    pattern = r'<title\s*.*>(?P<title>\s*.*)<\/title>'
+    match = re.search(pattern, html)
+
+    return HttpResponse(match.group('title'))
