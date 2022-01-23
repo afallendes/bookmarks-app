@@ -7,6 +7,7 @@ from .views import (
     BookmarkCreateView,
     BookmarkUpdateView,
     BookmarkDeleteView,
+    get_url_metadata
 )
 
 app_name = 'frontend'
@@ -17,5 +18,6 @@ urlpatterns = [
     path('bookmarks/create/', BookmarkCreateView.as_view(), name='bookmark-create'), 
     path('bookmarks/<pk>/update/', BookmarkUpdateView.as_view(), name='bookmark-update'),
     path('bookmarks/<pk>/delete/', BookmarkDeleteView.as_view(), name='bookmark-delete'),
-    # path('tags/', TagListView.as_view(), name='tags-list'), 
+    # path('tags/', TagListView.as_view(), name='tags-list'),
+    path('helpers/get-url-metadata/', get_url_metadata, name='get-url-metadata'),
 ]
