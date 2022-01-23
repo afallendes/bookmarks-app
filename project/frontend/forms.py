@@ -4,10 +4,14 @@ from backend.models import Bookmark, Tag
 
 class BookmarkForm(forms.ModelForm):
 
+    # This custom bookmark form is required to be able to filter tags choices
+    # by their corresponding current user. A 'user' value is passed from the
+    # Create/Edit views to the form kwargs.
+
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
-        self.fields['tags'].queryset = Tag.objects.filter(user=user).distinct()
+        # Passing user to filter tags
+        self.fields['tags'].queryset = Tag.objects.filter(user=kwargs.pop('user')).distinct()
 
     class Meta:
         model = Bookmark

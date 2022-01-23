@@ -100,7 +100,7 @@ class BaseCreateUpdateView(LoginRequiredMixin):
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
 
-        form_kwargs['user'] = self.request.user
+        form_kwargs['user'] = self.request.user # To help the bookmark form filter tags by user
 
         if 'data' in form_kwargs:
             data = form_kwargs['data'].copy()
