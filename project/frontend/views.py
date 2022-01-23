@@ -172,6 +172,7 @@ class BookmarkUpdateView(BaseCreateUpdateView, UpdateView):
     
 
 class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
+    model = Bookmark
     template_name = "frontend/bookmark_confirm_delete.html"
 
     def get_success_url(self):
