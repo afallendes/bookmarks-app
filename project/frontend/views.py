@@ -89,6 +89,7 @@ class BookmarkRecentListView(BaseListView):
 
 
 class BaseCreateUpdateView(LoginRequiredMixin):
+    model = Bookmark
     form_class = BookmarkForm
     extra_tags = None
 
@@ -156,7 +157,6 @@ class BookmarkUpdateView(BaseCreateUpdateView, UpdateView):
     
 
 class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
-    model = Bookmark
     template_name = "frontend/bookmark_confirm_delete.html"
 
     def get_success_url(self):

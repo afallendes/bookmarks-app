@@ -27,8 +27,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class Tag(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    text = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=50, unique=True)
+    text = models.CharField(max_length=50)
+    slug = models.SlugField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
@@ -39,6 +39,7 @@ class Tag(models.Model):
     class Meta:
         verbose_name = 'Tag'
         verbose_name_plural = 'Tags'
+        unique_together = [['user', 'slug']]
 
     def __str__(self):
         return self.text
@@ -47,7 +48,7 @@ class Tag(models.Model):
 class Bookmark(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    url = models.URLField(verbose_name='URL', max_length=200, unique=True)
+    url = models.URLField(verbose_name='URL', max_length=200)
     comments = models.TextField(max_length=500, blank=True)
     tags = models.ManyToManyField(Tag, related_name='bookmarks', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -56,6 +57,7 @@ class Bookmark(models.Model):
     class Meta:
         verbose_name = 'Bookmark'
         verbose_name_plural = 'Bookmarks'
+        unique_together = [['user', 'url']]
 
     def __str__(self):
         return self.url
