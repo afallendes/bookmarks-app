@@ -9,9 +9,10 @@ class BookmarkForm(forms.ModelForm):
     # Create/Edit views to the form kwargs.
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user') # This needs to be captured before __init__
         super().__init__(*args, **kwargs)
         # Passing user to filter tags
-        self.fields['tags'].queryset = Tag.objects.filter(user=kwargs.pop('user')).distinct()
+        self.fields['tags'].queryset = Tag.objects.filter(user=user).distinct()
 
     class Meta:
         model = Bookmark
