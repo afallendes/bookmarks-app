@@ -5,7 +5,7 @@ from string import ascii_uppercase
 from django.db.models import Count
 from django.http import HttpResponse
 from django.views.decorators.http import require_GET
-from django.views.generic import ListView, CreateView,UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -95,6 +95,10 @@ class CreateUpdateBookmarkConfig(BookmarkConfig):
         return form_valid_return
 
 
+class TagConfig(BaseConfig):
+    model = Tag
+    enable_create_bookmark_btn = False
+
 
 # Bookmark views based on config classes
 
@@ -149,6 +153,32 @@ class DeleteBookmarkView(BookmarkConfig, DeleteView):
     def get_success_url(self):
         return self.request.GET.get('next')
 
+
+# Tag views based on config classes
+
+class ListTagView(TagConfig, ListView):
+    template_name = "frontend/tags.html"
+    context_object_name = 'tags_grouped_by_letter'
+
+    def get_queryset(self):
+        queryset = super().get_queryset().annotate(
+            count=Count('bookmarks'),
+        )
+        return [{
+            'letter': _,
+            'tags': queryset.filter(slug__istartswith=_)
+        } for _ in ascii_uppercase ]
+
+
+class UpdateTagView(TagConfig, UpdateView):
+    template_name = "frontend/tag_update_form.html"
+    fields = ['text', 'slug']
+    success_url = reverse_lazy('frontend:tags-list')
+
+
+class DeleteTagView(TagConfig, DeleteView):
+    template_name = "frontend/tag_confirm_delete.html"
+    success_url = reverse_lazy('frontend:tags-list')
 
 
 # Helper views for specific interactions

@@ -1,0 +1,50 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}Update Tag{% endblock %}
+
+{% block section_title %}Update Tag: {{ form.text.value }}{% endblock %}
+
+{% block section_content %}
+<form class="form" method="POST">
+    {% csrf_token %}
+
+    <div class="row mb-3">
+        {{ form.text.errors }}
+        <label for="{{ form.text.id_for_label }}" class="col-sm-2 col-form-label">
+            Label
+        </label>
+        <div class="col-sm-10">
+            {{ form.text }}
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        {{ form.slug.errors }}
+        <label for="{{ form.slug.id_for_label }}" class="col-sm-2 col-form-label">
+            {{ form.slug.label }}
+        </label>
+        <div class="col-sm-10">
+            {{ form.slug }}
+        </div>
+    </div>
+    
+    <div class="row mb-3">
+        <div class="d-flex flex-wrap justify-content-between me-auto">
+            <a type="submit" href="{% url 'frontend:tags-list' %}" class="btn btn-outline-secondary">Cancel</a>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a type="button" href="{% url 'frontend:tag-delete' tag.pk %}" class="btn btn-outline-danger me-md-2">Delete</a>
+                <button type="submit" class="btn btn-secondary">Update</button>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+
+{% block customJS %}
+<script>
+$(function () {
+    $('input#id_slug').attr('readonly', true);
+});
+</script>
+{% endblock customJS %}

@@ -1,0 +1,17 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}Delete{% endblock %}
+
+{% block section_title %}Delete Tag: {{ object.text }}{% endblock %}
+
+{% block section_content %}
+<form method="post">
+    {% csrf_token %}
+    <p>Are you sure you want to delete <strong>{{ object.text }}</strong> tag?</p>
+    
+    <div class="d-flex flex-wrap justify-content-between me-auto">
+        <a type="submit" href="{% url 'frontend:tags-list' %}" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-outline-danger">Confirm</button>
+    </div>
+</form>
+{% endblock %}
