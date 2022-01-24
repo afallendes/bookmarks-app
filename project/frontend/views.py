@@ -1,15 +1,13 @@
-from ast import Try
 import re
 from urllib.request import Request, urlopen
 from string import ascii_uppercase
 
+from django.db.models import Count
 from django.http import HttpResponse
-from django.db.models import Count, F, fields
-from django.forms import BooleanField, BoundField
-from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.views.decorators.http import require_GET
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, CreateView,UpdateView, DeleteView, TemplateView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from backend.models import CustomUser, Bookmark, Tag
@@ -17,101 +15,36 @@ from backend.models import CustomUser, Bookmark, Tag
 from .forms import BookmarkForm
 
 
-class BaseListView(LoginRequiredMixin, ListView):
-    """
-    Base class for the following custom list views.
-    """
+# Base config classes with custom methods and attr based on mixins
 
-    enable_new_bookmark_button = True
+class BaseConfig(LoginRequiredMixin):
+    enable_create_bookmark_btn = False
     
-    def get_enable_new_bookmark_button(self):
+    def get_enable_create_bookmark_btn(self):
         # Helper for templates to indicate if the New Bookmark button should be rendered.
-        try:
-            enabled = self.enable_new_bookmark_button
-        except:
-            return False
-        else:
-            return enabled
+        if hasattr(self, 'enable_create_bookmark_btn'):
+            return self.enable_create_bookmark_btn
+        return False
     
-    def get_queryset(self):
-        user = self.request.user
-        return super().get_queryset().order_by('-created_at').filter(user=user)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["enable_new_bookmark_button"] = self.get_enable_new_bookmark_button()
+        context["enable_create_bookmark_btn"] = self.get_enable_create_bookmark_btn()
         return context
     
-
-
-class BookmarkListView(BaseListView):
-    """
-    List bookmarks sorted by created_at and paginated.
-    If a 'search' or 'tag' GET param is passed the queryset is filtered.
-    """
-
-    model = Bookmark
-    template_name = "frontend/bookmarks.html"
-    context_object_name = 'bookmarks'
-    paginate_by = 10
-    
     def get_queryset(self):
-        queryset = super().get_queryset().order_by('-created_at')
-        if 'search' in self.request.GET:
-            return queryset.filter(title__icontains=self.request.GET['search'])
-        if 'tag' in self.request.GET:
-            return queryset.filter(tags__slug=self.request.GET['tag'])
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context.update({
-            'search_param': self.request.GET.get('search'),
-            'tag_param': self.request.GET.get('search'),
-        })
-        return context
+        return super().get_queryset().filter(user=self.request.user)
 
 
-class BookmarkRecentListView(BaseListView):
-    """
-    List the most recent bookmarks sorted by created_at.
-    By default it lists last 5.
-    """
-
+class BookmarkConfig(BaseConfig):
     model = Bookmark
-    template_name = "frontend/bookmarks_recent.html"
-    context_object_name = 'bookmarks'
-    recent_items_num = 5
-
-    def get_recent_items_num(self):
-        return self.recent_items_num
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset[:self.get_recent_items_num()]
+    enable_create_bookmark_btn = True
 
 
-# class TagListView(BaseListView):
-#     model = Tag
-#     context_object_name = 'letters'
-#     template_name = 'frontend/tags.html'
-
-#     def get_queryset(self):
-#         queryset = super().get_queryset().annotate(
-#             count=Count('bookmarks'),
-#         )
-#         return { _:queryset.filter(slug__istartswith=_) for _ in ascii_uppercase }
-
-
-class BaseCreateUpdateView(LoginRequiredMixin):
-    model = Bookmark
+class CreateUpdateBookmarkConfig(BookmarkConfig):
     form_class = BookmarkForm
-    extra_tags = None
-
 
     def get_success_url(self):
         return self.request.GET.get('next')
-    
     
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -143,7 +76,6 @@ class BaseCreateUpdateView(LoginRequiredMixin):
             form_kwargs['data'] = data
         return form_kwargs
 
-
     def form_valid(self, form):
         form.instance.user = self.request.user
 
@@ -161,22 +93,65 @@ class BaseCreateUpdateView(LoginRequiredMixin):
                 bookmark.tags.add(tag)
         
         return form_valid_return
-    
 
-class BookmarkCreateView(BaseCreateUpdateView, CreateView):
+
+
+# Bookmark views based on config classes
+
+class ListBookmarkView(BookmarkConfig, ListView):
+    template_name = "frontend/bookmarks.html"
+    context_object_name = 'bookmarks'
+    paginate_by = 10
+    
+    def get_queryset(self):
+        queryset = super().get_queryset().order_by('-created_at')
+        if 'search' in self.request.GET:
+            return queryset.filter(title__icontains=self.request.GET['search'])
+        if 'tag' in self.request.GET:
+            return queryset.filter(tags__slug=self.request.GET['tag'])
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'search_param': self.request.GET.get('search'),
+            'tag_param': self.request.GET.get('search'),
+        })
+        return context
+
+
+class ListRecentBookmarkView(BookmarkConfig, ListView):
+    template_name = "frontend/bookmarks_recent.html"
+    context_object_name = 'bookmarks'
+    most_recent_items = 5
+
+    def get_most_recent_items(self):
+        if hasattr(self, 'most_recent_items'):
+            return self.most_recent_items
+        return 5
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.order_by('-created_at')[:self.get_most_recent_items()]
+
+
+class CreateBookmarkView(CreateUpdateBookmarkConfig, CreateView):
     template_name = "frontend/bookmark_create_form.html"
 
 
-class BookmarkUpdateView(BaseCreateUpdateView, UpdateView):
+class UpdateBookmarkView(CreateUpdateBookmarkConfig, UpdateView):
     template_name = "frontend/bookmark_update_form.html"
     
 
-class BookmarkDeleteView(LoginRequiredMixin, DeleteView):
-    model = Bookmark
+class DeleteBookmarkView(BookmarkConfig, DeleteView):
     template_name = "frontend/bookmark_confirm_delete.html"
 
     def get_success_url(self):
         return self.request.GET.get('next')
+
+
+
+# Helper views for specific interactions
 
 @login_required
 @require_GET
