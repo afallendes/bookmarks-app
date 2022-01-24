@@ -2,15 +2,10 @@
 
 {% block title %}Tags{% endblock %}
 
+{% block section_title %}List of Tags{% endblock %} 
+
 {% block section_content %}
 <div class="container">
-    <div class="d-flex justify-content-between mb-3">
-        <h3>List of Tags</h3>
-        {% comment %} <h3>Search: {{ by_search }}</h3> {% endcomment %}
-        {% comment %} <button type="button" class="btn btn-primary"><i class="bi bi-bookmark-plus"></i> Bookmark</button> {% endcomment %}
-    </div>
-
-
     {% for group in tags_grouped_by_letter %}
         {% if group.tags %}
 

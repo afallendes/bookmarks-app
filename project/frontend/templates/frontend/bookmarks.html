@@ -1,14 +1,14 @@
 {% extends 'frontend/base.html' %}
 
-{% block title %}Browse Bookmarks{% endblock %}
+{% block title %}Bookmarks{% endblock %}
 
 {% block section_title %}
     {% if request.GET.search %}
-    Search: {{ request.GET.search }}
+    Bookmarks by Search: {{ request.GET.search }}
     {% elif request.GET.tag %}
-    Tag: {{ request.GET.tag }}
+    Bookmarks by Tag: {{ request.GET.tag }}
     {% else %}
-    Bookmarks
+    List of Bookmarks
     {% endif %}
 {% endblock %}  
 
