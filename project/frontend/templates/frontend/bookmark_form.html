@@ -19,6 +19,7 @@
             {{ form.url }}
         </div>
     </div>
+    <img id="favicon" src=""/>
     <div class="row mb-3">
         {{ form.title.errors }}
         <label for="{{ form.title.id_for_label }}" class="col-sm-2 col-form-label">
@@ -68,8 +69,9 @@
                 url: $('input#id_url').val(),
                 csrfmiddlewaretoken: getCRSF()
             }            
-        ).done(function(title) {
-            $('input#id_title').val(title)
+        ).done(function(metadata) {
+            $('input#id_title').val(metadata.title);
+            $('img#favicon').attr('src', `data:image/jpeg;base64,${metadata.icon}`);
         })
     }
 

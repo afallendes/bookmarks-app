@@ -1,9 +1,10 @@
 import re
 from urllib.request import Request, urlopen
 from string import ascii_uppercase
+import base64
 
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.views.generic import ListView, CreateView,UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
@@ -186,14 +187,51 @@ class DeleteTagView(TagConfig, DeleteView):
 @login_required
 @require_GET
 def get_url_metadata(request):
-    r = Request(
-        request.GET.get('url'),
-        headers={
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
-        }
-    )
-    html = urlopen(r).read().decode('utf-8')
-    pattern = r'<title\s*.*>(?P<title>\s*.*)<\/title>'
-    match = re.search(pattern, html)
+    """
+    View to capture metadata from the url provided as GET param.
+    Returns metadata as JSON object with 'title' and 'icon' as attrs.
+    """
 
-    return HttpResponse(match.group('title'))
+    metadata = { 'title': None, 'icon': None }
+
+    def get_request_content(url):
+        headers = {
+            # This needs to be randomized in a future refactoring.
+            'User-Agent': """Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
+            AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"""
+        }
+        
+        r = Request(url, headers=headers)
+
+        return urlopen(r).read()
+
+
+    url = request.GET.get('url')
+
+    html = get_request_content(url).decode('utf-8')
+
+    # The following logic will probably be replaced by a mix of 'requests' and
+    # 'bs4' to ensure that tags are being capture properly in any case.
+    # Also requires error catching and return an status withing the metadata.
+
+    # Capture site's title
+    match_title = re.search(r'<title\s*.*>(?P<title>\s*.*)<\/title>', html)
+    if match_title:
+        metadata['title'] = match_title[0]
+
+
+    # Capture site's favicon
+    # match_link_rel_icon = re.search(r'(<link[^<>]*rel=\"[\w ]*icon[\w ]*\"[^<>]*>)', html)
+    # if match_link_rel_icon:
+    #     print('>>>', 'match_link_rel_icon[0]', match_link_rel_icon[0])
+    #     match_href_icon = re.search(r'href=\"(.+\.\w+)\"', match_link_rel_icon[0])
+    #     if match_href_icon:
+    #         img = get_request_content(match_href_icon[0])
+    #         print('>>>', 'match_href_icon[0]', match_href_icon[0])
+    #         metadata['icon'] = base64.b64encode(img).decode('utf-8')
+
+    # Using Google's 3rd party service for the meantime.
+    img = get_request_content('http://www.google.com/s2/favicons?domain=' + url)
+    metadata['icon'] = base64.b64encode(img).decode('utf-8')
+
+    return JsonResponse(metadata)
