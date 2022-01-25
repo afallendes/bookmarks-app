@@ -30,12 +30,17 @@ def get_url_request(url):
 
 def get_url_title(url):
     """ Returns captured title from provided HTML source, else returns None. """
-    source = get_url_request(url).text
 
-    pattern = re.compile(r'<title\s*.*>(?P<title>\s*.*)<\/title>', re.IGNORECASE)
-    match = pattern.search(source)
-    if match:
-        return html.unescape(match.group('title'))
+    r = get_url_request(url)
+    
+    if r.status_code == 200:
+
+        pattern = re.compile(r'<title\s*.*>(?P<title>\s*.*)<\/title>', re.IGNORECASE)
+        match = pattern.search(r.text)
+        
+        if match:
+            return html.unescape(match.group('title'))
+    
     return None
 
 
