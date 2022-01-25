@@ -1,8 +1,4 @@
-import re
-from urllib.request import Request, urlopen
-from html import unescape
 from string import ascii_uppercase
-import base64
 
 from django.db.models import Count
 from django.http import JsonResponse
@@ -13,8 +9,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
 from backend.models import CustomUser, Bookmark, Tag
-
-from .forms import BookmarkForm
+from frontend.forms import BookmarkForm
+from frontend.utils import get_url_title, get_url_favicon
 
 
 # Base config classes with custom methods and attr based on mixins
@@ -193,46 +189,9 @@ def get_url_metadata(request):
     Returns metadata as JSON object with 'title' and 'icon' as attrs.
     """
 
-    metadata = { 'title': None, 'icon': None }
-
-    def get_request_content(url):
-        headers = {
-            # This needs to be randomized in a future refactoring.
-            'User-Agent': """Mozilla/5.0 (Windows NT 10.0; Win64; x64) 
-            AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"""
-        }
-        
-        r = Request(url, headers=headers)
-
-        return urlopen(r).read()
-
-
     url = request.GET.get('url')
 
-    html = unescape(get_request_content(url).decode('utf-8'))
-
-    # The following logic will probably be replaced by a mix of 'requests' and
-    # 'bs4' to ensure that tags are being capture properly in any case.
-    # Also requires error catching and return an status withing the metadata.
-
-    # Capture site's title
-    match_title = re.search(r'<title\s*.*>(?P<title>\s*.*)<\/title>', html)
-    if match_title:
-        metadata['title'] = match_title.group('title')
-
-
-    # Capture site's favicon
-    # match_link_rel_icon = re.search(r'(<link[^<>]*rel=\"[\w ]*icon[\w ]*\"[^<>]*>)', html)
-    # if match_link_rel_icon:
-    #     print('>>>', 'match_link_rel_icon[0]', match_link_rel_icon[0])
-    #     match_href_icon = re.search(r'href=\"(.+\.\w+)\"', match_link_rel_icon[0])
-    #     if match_href_icon:
-    #         img = get_request_content(match_href_icon[0])
-    #         print('>>>', 'match_href_icon[0]', match_href_icon[0])
-    #         metadata['icon'] = base64.b64encode(img).decode('utf-8')
-
-    # Using Google's 3rd party service for the meantime.
-    img = get_request_content('http://www.google.com/s2/favicons?domain=' + url)
-    metadata['icon'] = base64.b64encode(img).decode('utf-8')
-
-    return JsonResponse(metadata)
+    return JsonResponse({
+        'title': get_url_title(url),
+        'favicon': get_url_favicon(url)
+    })
