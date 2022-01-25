@@ -1,5 +1,6 @@
 import re
 from urllib.request import Request, urlopen
+from html import unescape
 from string import ascii_uppercase
 import base64
 
@@ -208,7 +209,7 @@ def get_url_metadata(request):
 
     url = request.GET.get('url')
 
-    html = get_request_content(url).decode('utf-8')
+    html = unescape(get_request_content(url).decode('utf-8'))
 
     # The following logic will probably be replaced by a mix of 'requests' and
     # 'bs4' to ensure that tags are being capture properly in any case.
@@ -217,7 +218,7 @@ def get_url_metadata(request):
     # Capture site's title
     match_title = re.search(r'<title\s*.*>(?P<title>\s*.*)<\/title>', html)
     if match_title:
-        metadata['title'] = match_title[0]
+        metadata['title'] = match_title.group('title')
 
 
     # Capture site's favicon
