@@ -40,9 +40,9 @@ def get_url_title(url):
 
 
 def get_url_favicon(url):
-    # Returns favicon from provided URL as binary.
-    # This uses a Google's 3rd-party service for simplecity.
+    """ Returns favicon from provided URL as base64 string. """
 
+    # This uses a Google's 3rd-party service for simplecity.
     r = get_url_request('http://www.google.com/s2/favicons?domain=' + url)
 
     if r.status_code == 200:
