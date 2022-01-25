@@ -19,7 +19,7 @@
             {{ form.url }}
         </div>
     </div>
-    <img id="favicon" src=""/>
+    
     <div class="row mb-3">
         {{ form.title.errors }}
         <label for="{{ form.title.id_for_label }}" class="col-sm-2 col-form-label">
@@ -27,11 +27,19 @@
         </label>
         <div class="col-sm-10">
             <div class="input-group">
+                <span class="input-group-text bg-light" id="favicon-location">
+                    {% if form.favicon.value %}
+                    <img class="rounded" id="favicon" src="{{ form.favicon.value }}"/>
+                    {% else %}
+                    <i class="bi bi-asterisk"></i>
+                    {% endif %}
+                </span>
                 {{ form.title }}
                 <button class="btn btn-outline-secondary" type="button" id="get-metadata-button" onclick="getURLMetadata()"><i class="bi bi-magic"></i> Get it for me!</button>
             </div>
         </div>
     </div>
+
     <div class="row mb-3">
         {{ form.comments.errors }}
         <label for="{{ form.comments.id_for_label }}" class="col-sm-2 col-form-label">
@@ -41,6 +49,7 @@
             {{ form.comments }}
         </div>
     </div>
+
     <div class="row mb-3">
         {{ form.tags.errors }}
         <label for="{{ form.tags.id_for_label }}" class="col-sm-2 col-form-label">
@@ -50,6 +59,9 @@
             {{ form.tags }}
         </div>
     </div>
+    
+    {{ form.favicon.as_hidden }}
+
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 {% endblock %}
@@ -71,7 +83,9 @@
             }            
         ).done(function(metadata) {
             $('input#id_title').val(metadata.title);
-            $('img#favicon').attr('src', `data:image/jpeg;base64,${metadata.icon}`);
+            $('input#id_favicon').val(metadata.favicon);
+            iconHTML = `<img id="favicon" src="${metadata.favicon}"/>`;
+            $('span#favicon-location').html(iconHTML);
         })
     }
 
