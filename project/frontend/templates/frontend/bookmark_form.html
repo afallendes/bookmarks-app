@@ -29,7 +29,7 @@
             <div class="input-group">
                 <span class="input-group-text bg-light" id="favicon-location">
                     {% if form.favicon.value %}
-                    <img class="rounded" id="favicon" src="{{ form.favicon.value }}"/>
+                    <img class="rounded" id="favicon" src="{{ form.favicon.value }}" height="16" width="16"/>
                     {% else %}
                     <i class="bi bi-asterisk"></i>
                     {% endif %}
@@ -84,7 +84,7 @@
         ).done(function(metadata) {
             $('input#id_title').val(metadata.title);
             $('input#id_favicon').val(metadata.favicon);
-            iconHTML = `<img id="favicon" src="${metadata.favicon}"/>`;
+            iconHTML = `<img id="favicon" src="${metadata.favicon}" height="16" width="16"/>`;
             $('span#favicon-location').html(iconHTML);
         })
     }

@@ -10,7 +10,9 @@
     <li class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
             <h6 class="mb-1 text-truncate">
-                {% if bookmark.favicon %}<img class="rounded" id="favicon" src="{{ bookmark.favicon }}"/>{% endif %}
+                {% if bookmark.favicon %}
+                <img class="rounded" id="favicon" src="{{ bookmark.favicon }}" height="16" width="16"/>
+                {% endif %}
                 <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a>
             </h6>
             <small>{{ bookmark.created_at}}</small>

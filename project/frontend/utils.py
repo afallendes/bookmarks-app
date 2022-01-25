@@ -48,7 +48,7 @@ def get_url_favicon(url):
     """ Returns favicon from provided URL as base64 string. """
 
     # This uses a Google's 3rd-party service for simplecity.
-    r = get_url_request('http://www.google.com/s2/favicons?domain=' + url)
+    r = get_url_request(f'http://www.google.com/s2/favicons?domain={url}&sz=64')
 
     if r.status_code == 200:
         # If request is OK then capture filetype as prefix
