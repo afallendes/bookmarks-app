@@ -170,7 +170,7 @@ class ListTagView(TagConfig, ListView):
 
 class UpdateTagView(TagConfig, UpdateView):
     template_name = "frontend/tag_update_form.html"
-    fields = ['text', 'slug']
+    fields = ['text', ]
     success_url = reverse_lazy('frontend:tags-list')
 
 
