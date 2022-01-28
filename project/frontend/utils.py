@@ -41,7 +41,7 @@ def get_url_title(url):
         if match:
             return html.unescape(match.group('title'))
     
-    return None
+    return ''
 
 
 def get_url_favicon(url):
@@ -57,4 +57,4 @@ def get_url_favicon(url):
         print(base64.b64encode(r.content).decode('utf-8'))
 
         return f"data:image/png;base64,{base64.b64encode(r.content).decode('utf-8')}"
-    return None
+    return ''
