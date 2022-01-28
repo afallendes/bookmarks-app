@@ -25,7 +25,9 @@ def get_url_request(url):
         'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
     ]
 
-    return requests.get(url, headers={'User-Agent': random.choice(user_agents)})
+    headers = {'User-Agent': random.choice(user_agents)}
+
+    return requests.get(url, headers=headers, allow_redirects=True)
 
 
 def get_url_title(url):

@@ -28,6 +28,7 @@
         <div class="col-sm-10">
             <div class="input-group">
                 <span class="input-group-text bg-light" id="favicon-location">
+                    {{ form.favicon.as_hidden }}
                     {% if form.favicon.value %}
                     <img class="rounded" id="favicon" src="{{ form.favicon.value }}" height="16" width="16"/>
                     {% else %}
@@ -35,7 +36,7 @@
                     {% endif %}
                 </span>
                 {{ form.title }}
-                <button class="btn btn-outline-secondary" type="button" id="get-metadata-button" onclick="getURLMetadata()"><i class="bi bi-magic"></i> Get it for me!</button>
+                <button class="btn btn-outline-secondary" type="button" id="get-metadata-button" onclick="getURLMetadata()"><i class="bi bi-magic"></i> Magic!</button>
             </div>
         </div>
     </div>
@@ -59,8 +60,6 @@
             {{ form.tags }}
         </div>
     </div>
-    
-    {{ form.favicon.as_hidden }}
 
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
@@ -82,10 +81,15 @@
                 csrfmiddlewaretoken: getCRSF()
             }            
         ).done(function(metadata) {
-            $('input#id_title').val(metadata.title);
-            $('input#id_favicon').val(metadata.favicon);
-            iconHTML = `<img id="favicon" src="${metadata.favicon}" height="16" width="16"/>`;
-            $('span#favicon-location').html(iconHTML);
+            console.log(metadata)
+            if ( metadata.title.length != 0 ) {
+                $('input#id_title').val(metadata.title);
+            }
+            if ( metadata.favicon.length != 0 ) {
+                $('input#id_favicon').val(metadata.favicon);
+                iconHTML = `<img id="favicon" src="${metadata.favicon}" height="16" width="16"/>`;
+                $('span#favicon-location').html(iconHTML);
+            }
         })
     }
 
