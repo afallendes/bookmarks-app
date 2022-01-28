@@ -81,7 +81,6 @@
                 csrfmiddlewaretoken: getCRSF()
             }            
         ).done(function(metadata) {
-            console.log(metadata)
             if ( metadata.title.length != 0 ) {
                 $('input#id_title').val(metadata.title);
             }

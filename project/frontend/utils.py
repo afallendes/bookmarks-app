@@ -54,9 +54,6 @@ def get_url_favicon(url):
 
     if r.status_code == 200:
         # If request is OK then capture filetype as prefix
-        print('>>>', 'content-type', r.headers.get('content-type'))
-
-        print(base64.b64encode(r.content).decode('utf-8'))
-
         return f"data:image/png;base64,{base64.b64encode(r.content).decode('utf-8')}"
+    
     return ''
