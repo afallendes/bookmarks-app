@@ -191,7 +191,9 @@ def get_url_metadata(request):
 
     url = request.GET.get('url')
 
-    return JsonResponse({
+    metadata = {
         'title': get_url_title(url),
         'favicon': get_url_favicon(url)
-    })
+    }
+
+    return JsonResponse(metadata)
