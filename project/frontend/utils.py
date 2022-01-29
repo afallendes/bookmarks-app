@@ -4,29 +4,48 @@ import re
 import base64
 import html
 
+from project.settings import env
+
 
 def get_url_request(url):
-    """ Returns a URL request with randomized user-agent. """
+    """
+    Returns a URL request using a simple local randomized user-agent request. If that connection
+    fails, due to exceeded requests or a server error, then tries with an external proxy service.
+    """
 
-    # Some of the most common user-agents.
-    # REF: https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
+    try:
+
+        # Some of the most common user-agents.
+        # REF: https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
+        
+        user_agents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
+            'VM280:1 Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
+            'VM280:1 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
+            'VM280:1 Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)',
+            'VM280:1 Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko)',
+            'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko)',
+            'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+            'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15',
+            'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
+        ]
+
+        headers = {'User-Agent': random.choice(user_agents)}
+
+        r = requests.get(url, headers=headers, allow_redirects=True)
     
-    user_agents = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
-        'VM280:1 Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
-        'VM280:1 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
-        'VM280:1 Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)',
-        'VM280:1 Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/605.1.15 (KHTML, like Gecko)',
-        'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko)',
-        'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
-        'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15',
-        'VM38:1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
-    ]
+    except requests.exceptions.RequestException as e:
 
-    headers = {'User-Agent': random.choice(user_agents)}
+        proxy_url = env.str('PROXY_URL')
+        proxy_apikey = env.str('PROXY_APIKEY')
 
-    return requests.get(url, headers=headers, allow_redirects=True)
+        headers = {"apikey": proxy_apikey}
+        params = {"url": url}
+
+        r = requests.get(proxy_url, params=params, headers=headers)
+    
+    return r
 
 
 def get_url_title(url):
