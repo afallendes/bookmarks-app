@@ -36,7 +36,9 @@
                     {% endif %}
                 </span>
                 {{ form.title }}
-                <button class="btn btn-outline-secondary" type="button" id="get-metadata-button" onclick="getURLMetadata()"><i class="bi bi-magic"></i> Magic!</button>
+                <button class="btn btn-outline-secondary" type="button" id="get-metadata-button" onclick="getURLMetadata()" data-bs-html="true" title="<b>MAGIC</b> Get it for me!">
+                    <i class="bi bi-magic"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -67,13 +69,25 @@
 
 {% block customJS %}
 <script>
+    // Magic button settings
+    let magicButton = $('button#get-metadata-button');
+    let magicButtonStillHTML = magicButton.html();
+    let magicButtonLoadingHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>'
+
+    new bootstrap.Tooltip(document.getElementById('get-metadata-button')) // Initialize its tooltip
 
 
+    
     function getCRSF() {
         return $("input[name='csrfmiddlewaretoken']").attr('value');
     }
 
+
     function getURLMetadata() {
+
+        // Show loading spinner when a request is performed
+        magicButton.html(magicButtonLoadingHTML)
+
         $.get(
             "{% url 'frontend:get-url-metadata' %}",
             {
@@ -81,16 +95,21 @@
                 csrfmiddlewaretoken: getCRSF()
             }            
         ).done(function(metadata) {
+            // Return title if exists
             if ( metadata.title.length != 0 ) {
                 $('input#id_title').val(metadata.title);
             }
-
+            
+            // Return icon if exists
             if ( metadata.favicon.length != 0 ) {
                 $('input#id_favicon').val(metadata.favicon);
                 $('span#favicon-location').html(
                     `<img id="favicon" src="${metadata.favicon}" height="16" width="16"/>`
                 );
             }
+
+            // Stop showing loading spinner when request is done
+            magicButton.html(magicButtonStillHTML);
         })
     }
 
