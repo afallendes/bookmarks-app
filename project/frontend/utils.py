@@ -4,14 +4,20 @@ import re
 import base64
 import html
 
+from project.settings import env
+
 
 def get_url_request(url):
-    """ Returns a URL request with randomized user-agent. """
+    """
+    Returns a URL request using a simple local randomized user-agent request. If that connection
+    fails, due to exceeded requests or a server error, then tries with an external proxy service.
+    """
 
-    # Some of the most common user-agents.
-    # REF: https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
-    
+    # 1) Try with simple local request
+
     user_agents = [
+        # Some of the most common user-agents.
+        # REF: https://developers.whatismybrowser.com/useragents/explore/operating_system_name/
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
         'VM280:1 Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
         'VM280:1 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
@@ -26,7 +32,20 @@ def get_url_request(url):
 
     headers = {'User-Agent': random.choice(user_agents)}
 
-    return requests.get(url, headers=headers, allow_redirects=True)
+    r = requests.get(url, headers=headers, allow_redirects=True)
+
+    if r.status_code == 200:
+        return r
+
+    
+    # 2) Try with proxy service
+
+    proxy_url = env.str('PROXY_URL')
+    proxy_apikey = env.str('PROXY_APIKEY')
+
+    r = requests.get(proxy_url, params={"url": url}, headers={"apikey": proxy_apikey})
+    
+    return r
 
 
 def get_url_title(url):
