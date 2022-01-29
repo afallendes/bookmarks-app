@@ -1,4 +1,3 @@
-import imp
 import random
 import requests
 import re
@@ -37,11 +36,11 @@ def get_url_title(url):
     
     if r.status_code == 200:
 
-        pattern = re.compile(r'<title\s*.*>(?P<title>\s*.*)<\/title>', re.IGNORECASE)
+        pattern = re.compile(r'<title[^\>\<]*>(?P<title>[^\>\<]*)<\/title>', re.IGNORECASE)
         match = pattern.search(r.text)
         
         if match:
-            return html.unescape(match.group('title'))
+            return html.unescape(match.group('title')).strip()
     
     return ''
 
