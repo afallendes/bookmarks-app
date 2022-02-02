@@ -34,7 +34,7 @@
             
             {% if bookmark.tags.all %}
             <small>
-                {% for tag in bookmark.tags.all %}
+                {% for tag in bookmark.tags.all|dictsort:"slug" %}
                 <a href="?tag={{ tag.slug }}" class="link-secondary"><span class="badge bg-secondary">{{ tag.text }}</span></a>
                 {% endfor %}
             </small>
