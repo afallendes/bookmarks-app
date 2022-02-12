@@ -1,12 +1,24 @@
-<nav class="py-2 bg-light border-bottom">
-    <div class="container d-flex flex-wrap">
-        <ul class="nav me-auto">
-            <li class="nav-item"><a href="{% url 'frontend:bookmarks-list' %}" class="nav-link link-dark px-2 active" aria-current="page">Bookmarks</a></li>
-            <li class="nav-item"><a href="{% url 'frontend:tags-list' %}" class="nav-link link-dark px-2">Tags</a></li>
-        </ul>
-        <ul class="nav align-middle">
-            <li class="nav-item"><a href="#" class="nav-link link-dark px-2 disabled">{{ request.user }}</a></li>
-            <li class="nav-item"><a href="{% url 'logout' %}" class="nav-link link-dark px-2">Logout</a></li>
-        </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+    <div class="container">
+            <ul class="nav me-auto">
+                <li class="nav-item"><a class="nav-link link-dark px-2" href="{% url 'frontend:bookmarks-list' %}">Bookmarks</a></li>
+                <li class="nav-item"><a class="nav-link link-dark px-2" href="{% url 'frontend:tags-list' %}">Tags</a></li>
+                <li class="nav-item"><a class="nav-link link-dark px-2 disabled" href="#">Collections</a></li>
+            </ul>
+        <div class="btn-group">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="{{ request.user }}">
+                <i class="bi bi-person-circle"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><h6 class="dropdown-header">{{ request.user }}</h6></li>
+                {% comment %} <li><a class="dropdown-item" href="{% url 'frontend:bookmark-create' %}?origin={{ request.get_full_path | urlencode }}">New bookmark</a></li> {% endcomment %}
+                <li><a class="dropdown-item" href="{% url 'frontend:bookmark-create' %}#bookmark-form">New bookmark</a></li>
+                <li><a class="dropdown-item disabled" href="#">New tag</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item disabled" href="#">Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}" class="nav-link link-dark px-2">Log out</a></li>
+            </ul>
+          </div>
     </div>
-</nav>
+  </nav>
