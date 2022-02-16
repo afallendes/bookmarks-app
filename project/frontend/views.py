@@ -149,7 +149,7 @@ class DeleteBookmarkView(BookmarkConfig, DeleteView):
     template_name = "frontend/bookmark_confirm_delete.html"
 
     def get_success_url(self):
-        return self.request.GET.get('origin')
+        return reverse_lazy('frontend:bookmarks-recent')
 
 
 # Tag views based on config classes
@@ -180,7 +180,7 @@ class DeleteTagView(TagConfig, DeleteView):
     template_name = "frontend/tag_confirm_delete.html"
 
     def get_success_url(self):
-        return self.request.GET.get('origin')
+        return reverse_lazy('frontend:bookmarks-recent')
 
 
 # Helper views for specific interactions
