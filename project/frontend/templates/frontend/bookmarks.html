@@ -3,39 +3,53 @@
 {% block title %}Bookmarks{% endblock %}
 
 {% block section_title %}
+    <h3>Bookmarks <small class="text-muted">list</small></h3>
     {% if request.GET.search %}
-    Bookmarks by Search: {{ request.GET.search }}
+    <p>List filtered by search term: <b>{{ request.GET.search }}</b>.</p>
     {% elif request.GET.tag %}
-    Bookmarks by Tag: {{ request.GET.tag }}
+    <p>List filtered by tag:
+        <strong>{{ request.GET.tag }}.</strong>
+        <a class="link-secondary" href="{% url 'frontend:tag-update' request.GET.tag %}?origin={{ request.get_full_path|urlencode }}">
+            <i class="bi bi-pencil-square"></i>
+        </a>
+    </p>
     {% else %}
-    List of Bookmarks
+    <p>Find all your bookmarks.</p>
     {% endif %}
 {% endblock %}  
 
 {% block section_content %}
-    <ul class="list-group">
+
+    <ul class="list-group mb-3">
         {% for bookmark in bookmarks %}
-        <li class="list-group-item list-group-item-action">
-            <div class="d-flex w-100 justify-content-between">
+        <li class="list-group-item list-group-item-action ">
+
+           <div class="d-flex w-100 justify-content-between">
                 <h6 class="mb-1 me-2 text-truncate">
                     {% if bookmark.favicon %}
                     <img class="rounded" id="favicon" src="{{ bookmark.favicon }}" height="16" width="16"/>
+                    {% else %}
+                    <i class="bi bi-asterisk"></i>
                     {% endif %}
                     <a href="{{ bookmark.url }}" target="_blank">{{ bookmark.title }}</a>
                 </h6>
-                <div class="btn-group btn-group-sm" role="group" aria-label="...">
-                    <a class="btn btn-outline-secondary border-end-0" href="{{ bookmark.pk }}/update/?next={{ request.get_full_path|urlencode }}" role="button"><i class="bi bi-pencil-square"></i></a>
-                    <a class="btn btn-outline-danger" href="{{ bookmark.pk }}/delete/?next={{ request.get_full_path|urlencode }}" role="button"><i class="bi bi-trash"></i></a>
-                </div>
+                <a role="button"
+                   class="btn btn-sm btn-outline-secondary"
+                   href="{% url 'frontend:bookmark-update' bookmark.pk %}?origin={{ request.get_full_path|urlencode }}">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
             </div>
+
             {% if bookmark.comments %}
-            <p class="mb-1">{{ bookmark.comments }}</p>
+            <p class="small mb-1">{{ bookmark.comments }}</p>
             {% endif %}
             
             {% if bookmark.tags.all %}
             <small>
                 {% for tag in bookmark.tags.all|dictsort:"slug" %}
-                <a href="?tag={{ tag.slug }}" class="link-secondary"><span class="badge bg-secondary">{{ tag.text }}</span></a>
+                <a class="text-decoration-none" href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}">
+                    <span class="badge bg-secondary">{{ tag.text }}</span>
+                </a>
                 {% endfor %}
             </small>
             {% endif %}
