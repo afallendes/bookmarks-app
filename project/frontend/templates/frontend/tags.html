@@ -2,28 +2,33 @@
 
 {% block title %}Tags{% endblock %}
 
-{% block section_title %}List of Tags{% endblock %} 
+{% block section_title %}
+<h3>Tags <small class="text-muted">list</small></h3>
+<p>Explore your created tags.</p>
+{% endblock %} 
 
 {% block section_content %}
-<div class="container">
+<div class="accordion" id="accordionPanelsStayOpenExample">
     {% for group in tags_grouped_by_letter %}
-        {% if group.tags %}
-
-            <h5>{{ group.letter }}</h5>
-
-            <hr class="mt-0 mb-2">
-
-            <div class="hstack gap-2 mb-4">
-            {% for tag in group.tags %}
-                <a class="p-0" href="{% url 'frontend:tag-update' tag.pk %}">
+    {% if group.tags %}
+    <div class="accordion-item">
+        <h5 class="accordion-header" id="panel-heading-{{ group.letter }}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-collapse-{{ group.letter }}" aria-expanded="false" aria-controls="panel-collapse-{{ group.letter }}">
+                <strong class="col-2">{{ group.letter }}</strong>
+                <small class="text-muted">{{ group.tags|length }} bookmark(s)</small>
+            </button>
+        </h5>
+        <div id="panel-collapse-{{ group.letter }}" class="accordion-collapse collapse" aria-labelledby="panel-heading-{{ group.letter }}">
+            <div class="accordion-body">
+                {% for tag in group.tags %}
+                <a class="text-decoration-none" href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}">
                     <span class="badge bg-secondary">{{ tag }} ({{ tag.count }})</span>
                 </a>
-            {% endfor %}
+                {% endfor %}
             </div>
-
-        {% endif %}
+        </div>
+    </div>
+    {% endif %}
     {% endfor %}
-
-    {% include 'frontend/modules/pagination.html' %}
 </div>
 {% endblock %}

@@ -5,10 +5,13 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <link rel="shortcut icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0iY3VycmVudENvbG9yIiBjbGFzcz0iYmkgYmktYm9va21hcmstc3RhciIgdmlld0JveD0iMCAwIDE2IDE2Ij4KICA8cGF0aCBkPSJNNy44NCA0LjFhLjE3OC4xNzggMCAwIDEgLjMyIDBsLjYzNCAxLjI4NWEuMTc4LjE3OCAwIDAgMCAuMTM0LjA5OGwxLjQyLjIwNmMuMTQ1LjAyMS4yMDQuMi4wOTguMzAzTDkuNDIgNi45OTNhLjE3OC4xNzggMCAwIDAtLjA1MS4xNThsLjI0MiAxLjQxNGEuMTc4LjE3OCAwIDAgMS0uMjU4LjE4N2wtMS4yNy0uNjY4YS4xNzguMTc4IDAgMCAwLS4xNjUgMGwtMS4yNy42NjhhLjE3OC4xNzggMCAwIDEtLjI1Ny0uMTg3bC4yNDItMS40MTRhLjE3OC4xNzggMCAwIDAtLjA1LS4xNThsLTEuMDMtMS4wMDFhLjE3OC4xNzggMCAwIDEgLjA5OC0uMzAzbDEuNDItLjIwNmEuMTc4LjE3OCAwIDAgMCAuMTM0LS4wOThMNy44NCA0LjF6Ii8+CiAgPHBhdGggZD0iTTIgMmEyIDIgMCAwIDEgMi0yaDhhMiAyIDAgMCAxIDIgMnYxMy41YS41LjUgMCAwIDEtLjc3Ny40MTZMOCAxMy4xMDFsLTUuMjIzIDIuODE1QS41LjUgMCAwIDEgMiAxNS41VjJ6bTItMWExIDEgMCAwIDAtMSAxdjEyLjU2Nmw0LjcyMy0yLjQ4MmEuNS41IDAgMCAxIC41NTQgMEwxMyAxNC41NjZWMmExIDEgMCAwIDAtMS0xSDR6Ii8+Cjwvc3ZnPg==" />
+
         {% include 'frontend/modules/pre_load.html' %}
 
         <title>Bookmarks App - {% block title %}{% endblock %}</title>
     </head>
+
     <body>
         {% block body %}
 
@@ -16,14 +19,7 @@
         {% include 'frontend/modules/header.html' %}
 
         <div class="container">
-            <div class="d-flex justify-content-between mb-3">
-                <h3>{% block section_title %}{% endblock %}</h3>
-                {% if enable_create_bookmark_btn %}
-                <a class="btn btn-primary" href="{% url 'frontend:bookmark-create' %}?next={{ request.get_full_path|urlencode }}" role="button">
-                    <i class="bi bi-bookmark-plus"></i> New Bookmark
-                </a>
-                {% endif %}
-            </div>
+            {% block section_title %}{% endblock %}
             {% block section_content %}{% endblock %}
         </div>
         

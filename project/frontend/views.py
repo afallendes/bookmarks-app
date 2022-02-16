@@ -42,7 +42,7 @@ class CreateUpdateBookmarkConfig(BookmarkConfig):
     form_class = BookmarkForm
 
     def get_success_url(self):
-        return self.request.GET.get('next')
+        return self.request.GET.get('origin').replace('#bookmark-form', '')
     
     def get_form_kwargs(self):
         form_kwargs = super().get_form_kwargs()
@@ -149,7 +149,7 @@ class DeleteBookmarkView(BookmarkConfig, DeleteView):
     template_name = "frontend/bookmark_confirm_delete.html"
 
     def get_success_url(self):
-        return self.request.GET.get('next')
+        return reverse_lazy('frontend:bookmarks-recent')
 
 
 # Tag views based on config classes
@@ -171,12 +171,16 @@ class ListTagView(TagConfig, ListView):
 class UpdateTagView(TagConfig, UpdateView):
     template_name = "frontend/tag_update_form.html"
     fields = ['text', ]
-    success_url = reverse_lazy('frontend:tags-list')
+
+    def get_success_url(self):
+        return self.request.GET.get('origin')
 
 
 class DeleteTagView(TagConfig, DeleteView):
     template_name = "frontend/tag_confirm_delete.html"
-    success_url = reverse_lazy('frontend:tags-list')
+
+    def get_success_url(self):
+        return reverse_lazy('frontend:bookmarks-recent')
 
 
 # Helper views for specific interactions
