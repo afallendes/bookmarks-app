@@ -30,9 +30,9 @@
     
     <div class="row mb-3">
         <div class="d-flex flex-wrap justify-content-between me-auto">
-            <a type="submit" href="{% url 'frontend:tags-list' %}" class="btn btn-outline-secondary">Cancel</a>
+            <a type="submit" href="{{ request.GET.origin }}" class="btn btn-outline-secondary">Cancel</a>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a type="button" href="{% url 'frontend:tag-delete' tag.pk %}" class="btn btn-outline-danger me-md-2">Delete</a>
+                <a type="button" href="{% url 'frontend:tag-delete' tag.slug %}?origin={{ request.GET.origin }}" class="btn btn-outline-danger me-md-2">Delete</a>
                 <button type="submit" class="btn btn-secondary">Update</button>
             </div>
         </div>

@@ -22,7 +22,7 @@ urlpatterns = [
     path('bookmarks/<pk>/update/', UpdateBookmarkView.as_view(), name='bookmark-update'),
     path('bookmarks/<pk>/delete/', DeleteBookmarkView.as_view(), name='bookmark-delete'),
     path('tags/', ListTagView.as_view(), name='tags-list'), 
-    path('tags/<pk>/update/', UpdateTagView.as_view(), name='tag-update'),
-    path('tags/<pk>/delete/', DeleteTagView.as_view(), name='tag-delete'),
+    path('tags/<slug>/update/', UpdateTagView.as_view(), name='tag-update'),
+    path('tags/<slug>/delete/', DeleteTagView.as_view(), name='tag-delete'),
     path('helpers/get-url-metadata/', get_url_metadata, name='get-url-metadata'),
 ]
