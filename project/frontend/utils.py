@@ -3,6 +3,7 @@ import requests
 import re
 import base64
 import html
+import imghdr
 
 from project.settings import env
 
@@ -70,8 +71,12 @@ def get_url_favicon(url):
     # This uses a Google's 3rd-party service for simplecity.
     r = get_url_request(f'http://www.google.com/s2/favicons?domain={url}&sz=64')
 
+    mime_type = imghdr.what('placeholder', h=r.content)
+    if mime_type == 'ico':
+        mime_type = 'x-icon'
+
     if r.status_code == 200:
         # If request is OK then capture filetype as prefix
-        return f"data:image/png;base64,{base64.b64encode(r.content).decode('utf-8')}"
+        return f"data:image/{mime_type};base64,{base64.b64encode(r.content).decode('utf-8')}"
     
     return ''
