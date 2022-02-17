@@ -8,7 +8,7 @@
     <p>List filtered by search term: <b>{{ request.GET.search }}</b>.</p>
     {% elif request.GET.tag %}
     <p>List filtered by tag:
-        <strong>{{ request.GET.tag }}.</strong>
+        <strong>{{ tag_obj.text }}.</strong>
         <a class="link-secondary" href="{% url 'frontend:tag-update' request.GET.tag %}?origin={{ request.get_full_path|urlencode }}">
             <i class="bi bi-pencil-square"></i>
         </a>

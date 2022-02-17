@@ -115,10 +115,17 @@ class ListBookmarkView(BookmarkConfig, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({
-            'search_param': self.request.GET.get('search'),
-            'tag_param': self.request.GET.get('search'),
-        })
+
+        if 'search' in self.request.GET:
+            context.update({
+                'search_str': self.request.GET.get('search'),
+            })
+
+        if 'tag' in self.request.GET:
+            context.update({
+                'tag_obj': Tag.objects.get(slug=self.request.GET['tag']),
+            })
+            
         return context
 
 
