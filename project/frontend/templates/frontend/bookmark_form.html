@@ -69,7 +69,12 @@
 
     <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
         <a href="{{ request.GET.origin }}" class="btn btn-outline-secondary">Cancel</a>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <div class="text-end">
+            {% if 'update' in request.path %}
+            <a class="btn btn-outline-danger" href="{% url 'frontend:bookmark-delete' object.pk %}">Delete</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Update</button>
+        </div>
     </div>
 </form>
 {% endblock %}
