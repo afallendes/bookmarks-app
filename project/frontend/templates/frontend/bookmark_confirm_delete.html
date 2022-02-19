@@ -1,14 +1,25 @@
 {% extends 'frontend/base.html' %}
 
-{% block title %}Delete{% endblock %}
+{% block title %}Delete bookmark{% endblock %}
 
-{% block section_title %}Delete Bookmark{% endblock %}
+{% block section_title %}
+<h3>Delete <small class="text-muted">BOOKMARK</small></h3>
+{% endblock %}
 
 {% block section_content %}
 <form method="post">
     {% csrf_token %}
-    <p>Are you sure you want to delete the following bookmark?</p>
-    <p><a href="{{ object.url }}">{{ object.title }}</a></p>
-    <input type="submit" class="btn btn-outline-danger" value="Confirm">
+    <p>Are you sure you want to delete this bookmark?</p>
+    
+    <p>
+        <img id="favicon" src="{{ object.favicon }}" height="16" width="16"/>
+        <a class="link-primary" href="{{ object.url }}"><strong>{{ object.title }}</strong></a>
+        <br>
+        Last updated: {{ object.modified_at }}
+    </p>
+
+    <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-outline-secondary">Cancel</a>
+        <button type="submit" class="btn btn-danger">Confirm</button>
 </form>
 {% endblock %}
