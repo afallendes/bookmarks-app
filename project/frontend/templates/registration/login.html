@@ -21,7 +21,7 @@
     </head>
     <body>
       <main class="d-flex justify-content-center my-5">
-        <div id="form-wrapper" class="col-12 p-3">
+        <div id="form-wrapper" class="col-sm-3 col-12 p-3">
           <h1 class="fs-4 mb-5 text-center"><i class="bi bi-bookmark-star"></i> Bookmarks App</h1>
         
           <form method="post" action="{% url 'login' %}">
@@ -33,12 +33,12 @@
             {% csrf_token %}
             
             <div class="col-12 form-floating mb-3">
-              <input type="email" class="form-control {% if form.errors %}is-invalid{% endif %}" id="id_username">
+              <input type="email" class="form-control {% if form.errors %}is-invalid{% endif %}" id="id_username" name="username" autocapitalize="none" autocomplete="username" maxlength="254" autofocus required>
               <label for="id_username">Email</label>
             </div>
       
             <div class="col-12 form-floating mb-3">
-              <input type="password" class="form-control {% if form.errors %}is-invalid{% endif %}" id="id_password">
+              <input type="password" class="form-control {% if form.errors %}is-invalid{% endif %}" id="id_password" name="password" autocomplete="current-password" required>
               <label for="id_password">Password</label>
             </div>
       
