@@ -3,32 +3,61 @@
 {% block title %}Tags{% endblock %}
 
 {% block section_title %}
-<h3>Tags <small class="text-muted">list</small></h3>
-<p>Explore your created tags.</p>
+{% comment %} <h3>Tags <small class="text-muted">list</small></h3>
+<p>Explore your created tags.</p> {% endcomment %}
 {% endblock %} 
 
 {% block section_content %}
-<div class="accordion" id="accordionPanelsStayOpenExample">
-    {% for group in tags_grouped_by_letter %}
-    {% if group.tags %}
-    <div class="accordion-item">
-        <h5 class="accordion-header" id="panel-heading-{{ group.letter }}">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panel-collapse-{{ group.letter }}" aria-expanded="false" aria-controls="panel-collapse-{{ group.letter }}">
-                <strong class="col-2">{{ group.letter }}</strong>
-                <small class="text-muted">{{ group.tags|length }} bookmark(s)</small>
-            </button>
-        </h5>
-        <div id="panel-collapse-{{ group.letter }}" class="accordion-collapse collapse" aria-labelledby="panel-heading-{{ group.letter }}">
-            <div class="accordion-body">
-                {% for tag in group.tags %}
-                <a class="text-decoration-none" href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}">
-                    <span class="badge bg-secondary">{{ tag }} ({{ tag.count }})</span>
-                </a>
-                {% endfor %}
-            </div>
-        </div>
+{% comment %} 
+<div class="container bg-white p-3 sticky-top">
+  <div class="row">
+    <div class="col-1 text-center">
+      <span id="letter-selection">A</span>
     </div>
-    {% endif %}
-    {% endfor %}
+    <div class="col-11">
+      <input type="range" class="form-range"
+      min="1" max="{{ tags_grouped_by_letter|length }}" value="1"
+      id="range-letters">
+    </div>
+  </div>
 </div>
+{% endcomment %}
+
+{% for group in tags_grouped_by_letter %}
+{% if group.tags %}
+<div class="card text-center mb-3">
+  <div class="card-body">
+    <h5  class="card-title">{{ group.letter }}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">
+      {% with group.tags|length as count %}
+      {{ count }} bookmark{% if count > 1 %}s{% endif %}
+      {% endwith %}
+    </h6>
+    {% for tag in group.tags %}
+    <a class="text-decoration-none" href="{% url 'frontend:bookmarks-list' %}?tag={{ tag.slug }}">
+      <span class="badge bg-secondary">{{ tag }} ({{ tag.count }})</span>
+    </a>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{% endfor %}
+
 {% endblock %}
+
+
+{% block customJS %}
+{% comment %}
+<script>
+$(document).ready(function(){
+  let letterSelected;
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  $(document).on('input', '#range-letters', function() {
+    letterSelected = letters[$(this).val() - 1];
+    $('#letter-selection').html(letterSelected);
+    window.location = `#section-${letterSelected}`;
+  });
+})
+</script>
+{% endcomment %}
+{% endblock customJS %}
